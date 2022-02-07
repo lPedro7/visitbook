@@ -41,14 +41,11 @@ public class MyConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
                 .antMatchers("/", "/register").permitAll()
-                //.antMatchers("/admin/*").hasAnyRole("ROOT","ADMIN")
-                //.antMatchers("/edit/*","/delete/*").hasRole("ROOT")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login").permitAll()

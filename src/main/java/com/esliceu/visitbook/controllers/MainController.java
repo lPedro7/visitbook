@@ -22,10 +22,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Controller
 public class MainController {
@@ -148,6 +150,43 @@ public class MainController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_ROOT')")
     @GetMapping("/admin/{id}")
     public String admin(Model model,@PathVariable String id){
+
+        try {
+            Person person = (Person) session.getAttribute("person");
+            model.addAttribute("person", person);
+
+            Person useradmin = userDetailsServiceImpl.getById(id);
+            model.addAttribute("user",useradmin);
+
+        }catch (NoSuchElementException exception){
+            model.addAttribute("error","Usuari no trobat");
+            model.addAttribute("user",null);
+            return "admin";
+        }
+        return "admin";
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_ROOT')")
+    @PostMapping("/admin/{id}")
+    public String getAdmin(Model model,
+                           @PathVariable("id") String id,
+                           @RequestParam String password,
+                           @RequestParam String firstName,
+                           @RequestParam String lastName,
+                           @RequestParam String role,
+                           @RequestParam String confirmpassword){
+
+        try{
+            Person person = (Person) session.getAttribute("person");
+            model.addAttribute("person", person);
+
+            Person useradmin = userDetailsServiceImpl.getById(id);
+            model.addAttribute("user",useradmin);
+            userDetailsServiceImpl.updateUser(id,password,firstName,lastName,role,confirmpassword);
+        }catch (Exception e){
+            model.addAttribute("error","Contrassenya incorrecta");
+        }
+
         return "admin";
     }
 

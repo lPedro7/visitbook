@@ -4,6 +4,7 @@ import com.esliceu.visitbook.configuration.MyConfig;
 import com.esliceu.visitbook.models.Person;
 import com.esliceu.visitbook.repos.PersonRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.config.authentication.PasswordEncoderParser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -51,4 +52,36 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             personRepo.save(person);
     }
 
+    public Person getById(String id) throws NumberFormatException{
+        return personRepo.findById(Integer.valueOf(id)).get();
+    }
+
+    public void updateUser(String id, String password, String firstName, String lastName, String rol, String confirmpassword) throws Exception{
+
+        Person person = getById(id);
+
+        if (password == null){
+            password = person.getPassword();
+        }
+
+        Person actualuser = (Person) session.getAttribute("person");
+
+
+
+      if (MyConfig.getPasswordEncoder().matches(confirmpassword,actualuser.getPassword())){
+            Person pupdate = new Person();
+            pupdate.setEmail(person.getEmail());
+            pupdate.setId(Integer.parseInt(id));
+            pupdate.setPassword(password);
+            pupdate.setFirstName(firstName);
+            pupdate.setLastName(lastName);
+            pupdate.setRole(rol);
+            personRepo.save(pupdate);
+        }else {
+            throw new Exception();
+        }
+
+
+
+    }
 }
