@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+</head>
+<body>
+
+<div th:replace="header :: header"></div>
+
+
+<h1>Comentaris</h1>
+
+<div th:if="${person != null}"><a th:href="@{/entry}">Nova Entrada</a></div>
+
+<div th:if="${error}" th:text="${error}"></div>
+
+
+<table>
+    <tr>
+        <th>
+            Autor
+        </th>
+        <th>
+            Texte
+        </th>
+        <th th:if="${person != null && person.role == 'ROLE_ROOT'}">
+            Editar
+        </th>
+    </tr>
+    <tr th:each="e : ${entries}">
+        <td>
+            <span th:if="${person.role == 'ROLE_ROOT' || person.role == 'ROLE_ADMIN'}"><a th:href="@{/admin/{id}(id=${e.person.id})}"></a></span>
+            <span th:unless="${person.role == 'ROLE_ROOT' || person.role == 'ROLE_ADMIN'}" th:text="${e.person.firstName}"></span>
+        </td>
+        <td th:text="${e.text}"></td>
+        <td th:if="${person != null && person.role == 'ROLE_ROOT'}"><a th:href="@{/edit/{id}(id=${e.id})}">Editar</a></td>
+    </tr>
+</table>
+
+</body>
+</html>

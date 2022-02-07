@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edita</title>
+</head>
+<body>
+
+<div th:replace="header :: header"></div>
+<div th:if="${error}" th:text="${error}"></div>
+
+
+<h1>Editar Entrada</h1>
+
+
+<form th:action="@{/edit/{id}(id=${entry.getId()})}" method="post">
+    <textarea name="text" cols="30" rows="10">[[${entry.text}]]</textarea>
+    <input type="submit" value="Desa">
+</form>
+
+<form th:action="@{/delete/{id}(id=${entry.id})}" method="post">
+    <button type="submit">Eliminar Entrada</button>
+</form>
+
+</body>
+</html>

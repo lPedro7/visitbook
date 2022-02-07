@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+</head>
+<body>
+
+<div th:replace="header :: header"></div>
+
+
+<h1>Nova Entrada</h1>
+
+<form th:action="@{/entry}" method="post">
+    <textarea name="text" cols="30" rows="10"></textarea>
+    <input type="submit" value="Pujar">
+</form>
+
+</body>
+</html>

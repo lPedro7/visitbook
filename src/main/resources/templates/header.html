@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Nav</title>
+</head>
+<body>
+
+<nav th:fragment="header">
+
+    <div th:if="${person != null}" th:text="${person.firstName}"></div>
+
+
+    <ul>
+        <li><a th:href="@{/}">Home</a></li>
+        <li th:if="${person == null}" ><a th:href="@{/login}">Login</a></li>
+        <li th:if="${person == null}"><a th:href="@{/register}">Registrat</a></li>
+        <li th:if="${person != null}"><a th:href="@{/logout}">Logout</a></li>
+        <li th:if="${person != null && (person.role == 'ROLE_ADMIN' || person.role == 'ROLE_ROOT')}"><a th:href="@{/admin}">Admin</a></li>
+    </ul>
+</nav>
+
+</body>
+</html>
